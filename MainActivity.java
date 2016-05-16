@@ -1,6 +1,7 @@
 package com.benlewis.mmtrainerapp;
 
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -16,41 +17,53 @@ public class MainActivity extends AppCompatActivity {
 
     ArrayList<Integer> answers = new ArrayList<Integer>();
     int locationOfCorrect;
+
     TextView champTextView;
     TextView resultTextView;
     TextView scoreTextView;
+    TextView timerTextView;
+
     int score;
+    int noQuestions;
 
     Button a;
     Button b;
     Button c;
     Button d;
+    Button playAgainButton;
 
-    public void chooseAnswer(View view) {
+    public void playAgain(View view) {
 
-        if (view.getTag().toString().equals(Integer.toString(locationOfCorrect))) {
-            score++;
-            scoreTextView.setText(Integer.toString(score));
-            resultTextView.setText("Correct!");
-        } else {
-            resultTextView.setText("Wrong!");
-        }
+        score = 0;
+        noQuestions = 0;
+
+        timerTextView.setText("30s");
+        scoreTextView.setText("0/0");
+        resultTextView.setText("");
+        playAgainButton.setVisibility(View.INVISIBLE);
+
+        new CountDownTimer(30050, 1000) {
+
+            @Override
+            public void onTick(long millisUntilFinished) {
+                timerTextView.setText(String.valueOf(millisUntilFinished/1000) + "s");
+            }
+
+            @Override
+            public void onFinish() {
+
+                playAgainButton.setVisibility(View.VISIBLE);
+                timerTextView.setText("0s");
+                resultTextView.setText("Your score: " +
+                        Integer.toString(score)+ "/" + Integer.toString(noQuestions));
+            }
+        }.start();
+
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        champTextView = (TextView) findViewById(R.id.champTextView);
-        resultTextView = (TextView) findViewById(R.id.resultTextView);
-        scoreTextView = (TextView) findViewById(R.id.scoreTextView);
+    public void generateQuestion() {
 
-        a = (Button) findViewById(R.id.button);
-        b = (Button) findViewById(R.id.button1);
-        c = (Button) findViewById(R.id.button2);
-        d = (Button) findViewById(R.id.button3);
+        answers.clear();
 
         Random random = new Random();
 
@@ -83,6 +96,42 @@ public class MainActivity extends AppCompatActivity {
         b.setText(Integer.toString(answers.get(1)));
         c.setText(Integer.toString(answers.get(2)));
         d.setText(Integer.toString(answers.get(3)));
+    }
+
+    public void chooseAnswer(View view) {
+
+        if (view.getTag().toString().equals(Integer.toString(locationOfCorrect))) {
+            score++;
+            resultTextView.setText("Correct!");
+        } else {
+            resultTextView.setText("Wrong!");
+        }
+
+        noQuestions++;
+        scoreTextView.setText(Integer.toString(score)+ "/" + Integer.toString(noQuestions));
+        generateQuestion();
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        champTextView = (TextView) findViewById(R.id.champTextView);
+        resultTextView = (TextView) findViewById(R.id.resultTextView);
+        scoreTextView = (TextView) findViewById(R.id.scoreTextView);
+        timerTextView = (TextView) findViewById(R.id.timerTextView);
+
+        a = (Button) findViewById(R.id.button);
+        b = (Button) findViewById(R.id.button1);
+        c = (Button) findViewById(R.id.button2);
+        d = (Button) findViewById(R.id.button3);
+        playAgainButton = (Button) findViewById(R.id.playAgainButton);
+
+        generateQuestion();
+
+        playAgain(findViewById(R.id.playAgainButton));
     }
 
     @Override
