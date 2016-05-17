@@ -1,6 +1,7 @@
 package com.benlewis.mmtrainerapp;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
@@ -27,12 +28,31 @@ public class MainActivity extends AppCompatActivity {
 
     int score;
     int noQuestions;
+    int total;
 
     Button a;
     Button b;
     Button c;
     Button d;
     Button playAgainButton;
+
+    static SQLiteDatabase myDatabase;
+
+    public void initDatabase() {
+
+        try {
+
+            getApplicationContext().deleteDatabase("Scores");
+
+            myDatabase = this.openOrCreateDatabase("Scores", MODE_PRIVATE, null);
+
+            myDatabase.execSQL("CREATE TABLE IF NOT EXISTS scores (total INT(3), points INT(3)," +
+                    "id INTEGER PRIMARY KEY, questions INT(3))");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     public int getChamp (String champ) {
         return MainActivity.this.getResources().getIdentifier
@@ -76,6 +96,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFinish() {
 
+                if ( score <= 0 || noQuestions <= 0) {
+                    total = 0;
+                } else {
+                    total = Math.round(score / (noQuestions)*100);
+                }
+
                 playAgainButton.setVisibility(View.VISIBLE);
                 timerTextView.setText("0s");
                 resultTextView.setText("Your score: " +
@@ -86,6 +112,9 @@ public class MainActivity extends AppCompatActivity {
                 c.setVisibility(View.INVISIBLE);
                 d.setVisibility(View.INVISIBLE);
                 champTextView.setVisibility(View.INVISIBLE);
+
+                myDatabase.execSQL("INSERT INTO scores (total, points, questions) VALUES (" +
+                        total + ", " + score + ", " + noQuestions + ")");
             }
         }.start();
 
@@ -160,6 +189,8 @@ public class MainActivity extends AppCompatActivity {
         c = (Button) findViewById(R.id.button2);
         d = (Button) findViewById(R.id.button3);
         playAgainButton = (Button) findViewById(R.id.playAgainButton);
+
+        initDatabase();
 
         fillChampions();
 
