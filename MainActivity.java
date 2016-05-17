@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<String> champions = new ArrayList<String>();
 
     int locationOfCorrect;
-    int timer;
+    int timer = 30;
 
     TextView champTextView;
     TextView resultTextView;
@@ -41,6 +41,10 @@ public class MainActivity extends AppCompatActivity {
 
     static SQLiteDatabase myDatabase;
     static SharedPreferences sharedPreferences;
+
+    public void updateTimer() {
+        timer = sharedPreferences.getInt("timer", 0);
+    }
 
     public void initDatabase() {
 
@@ -90,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
 
         generateQuestion();
 
-        new CountDownTimer((timer*1000) + 50, 1000) {
+        new CountDownTimer((timer*1000)+50, 1000) {
 
             @Override
             public void onTick(long millisUntilFinished) {
@@ -193,6 +197,8 @@ public class MainActivity extends AppCompatActivity {
         scoreTextView = (TextView) findViewById(R.id.scoreTextView);
         timerTextView = (TextView) findViewById(R.id.timerTextView);
 
+        sharedPreferences = this.getSharedPreferences("com.benlewis.mmtrainerapp", MODE_PRIVATE);
+
         a = (Button) findViewById(R.id.button);
         b = (Button) findViewById(R.id.button1);
         c = (Button) findViewById(R.id.button2);
@@ -202,8 +208,7 @@ public class MainActivity extends AppCompatActivity {
         initDatabase();
         fillChampions();
         generateQuestion();
-
-        sharedPreferences = this.getSharedPreferences("com.benlewis.mmtrainerapp", MODE_PRIVATE);
+        updateTimer();
 
         playAgain(findViewById(R.id.playAgainButton));
     }
