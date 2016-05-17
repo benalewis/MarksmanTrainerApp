@@ -1,6 +1,7 @@
 package com.benlewis.mmtrainerapp;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -19,7 +20,9 @@ public class MainActivity extends AppCompatActivity {
 
     ArrayList<Integer> answers = new ArrayList<Integer>();
     ArrayList<String> champions = new ArrayList<String>();
+
     int locationOfCorrect;
+    int timer;
 
     TextView champTextView;
     TextView resultTextView;
@@ -37,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     Button playAgainButton;
 
     static SQLiteDatabase myDatabase;
+    static SharedPreferences sharedPreferences;
 
     public void initDatabase() {
 
@@ -86,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
 
         generateQuestion();
 
-        new CountDownTimer(10050, 1000) {
+        new CountDownTimer((timer*1000) + 50, 1000) {
 
             @Override
             public void onTick(long millisUntilFinished) {
@@ -196,10 +200,10 @@ public class MainActivity extends AppCompatActivity {
         playAgainButton = (Button) findViewById(R.id.playAgainButton);
 
         initDatabase();
-
         fillChampions();
-
         generateQuestion();
+
+        sharedPreferences = this.getSharedPreferences("com.benlewis.mmtrainerapp", MODE_PRIVATE);
 
         playAgain(findViewById(R.id.playAgainButton));
     }
