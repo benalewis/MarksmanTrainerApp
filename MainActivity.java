@@ -16,6 +16,7 @@ import java.util.Random;
 public class MainActivity extends AppCompatActivity {
 
     ArrayList<Integer> answers = new ArrayList<Integer>();
+    ArrayList<String> champions = new ArrayList<String>();
     int locationOfCorrect;
 
     TextView champTextView;
@@ -32,17 +33,39 @@ public class MainActivity extends AppCompatActivity {
     Button d;
     Button playAgainButton;
 
+    public int getChamp (String champ) {
+        return MainActivity.this.getResources().getIdentifier
+                (champ, "drawable", MainActivity.this.getPackageName());
+    }
+
+    public void fillChampions() {
+        champions.add("Ashe"); champions.add("Caitlyn"); champions.add("Corki");
+        champions.add("Draven"); champions.add("Ezreal"); champions.add("Jhin");
+        champions.add("Jinx"); champions.add("Kalista"); champions.add("KogMaw");
+        champions.add("Lucian"); champions.add("MissFortune"); champions.add("Quinn");
+        champions.add("Sivir"); champions.add("Tristana"); champions.add("Twitch");
+        champions.add("Urgot"); champions.add("Varus"); champions.add("Vayne");
+    }
+
     public void playAgain(View view) {
 
         score = 0;
         noQuestions = 0;
+
+        a.setVisibility(View.VISIBLE);
+        b.setVisibility(View.VISIBLE);
+        c.setVisibility(View.VISIBLE);
+        d.setVisibility(View.VISIBLE);
+        champTextView.setVisibility(View.VISIBLE);
 
         timerTextView.setText("30s");
         scoreTextView.setText("0/0");
         resultTextView.setText("");
         playAgainButton.setVisibility(View.INVISIBLE);
 
-        new CountDownTimer(30050, 1000) {
+        generateQuestion();
+
+        new CountDownTimer(3050, 1000) {
 
             @Override
             public void onTick(long millisUntilFinished) {
@@ -55,7 +78,13 @@ public class MainActivity extends AppCompatActivity {
                 playAgainButton.setVisibility(View.VISIBLE);
                 timerTextView.setText("0s");
                 resultTextView.setText("Your score: " +
-                        Integer.toString(score)+ "/" + Integer.toString(noQuestions));
+                        Integer.toString(score) + "/" + Integer.toString(noQuestions));
+
+                a.setVisibility(View.INVISIBLE);
+                b.setVisibility(View.INVISIBLE);
+                c.setVisibility(View.INVISIBLE);
+                d.setVisibility(View.INVISIBLE);
+                champTextView.setVisibility(View.INVISIBLE);
             }
         }.start();
 
@@ -91,11 +120,13 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        champTextView.setText(String.valueOf(correctAnswer));
-        a.setText(Integer.toString(answers.get(0)));
-        b.setText(Integer.toString(answers.get(1)));
-        c.setText(Integer.toString(answers.get(2)));
-        d.setText(Integer.toString(answers.get(3)));
+        champTextView.setText(champions.get(correctAnswer));
+        //a.setText(champions.get(answers.get(0)));
+        a.setBackgroundResource(getChamp(champions.get(answers.get(0)).toLowerCase()));
+        b.setText(champions.get(answers.get(1)));
+        c.setText(champions.get(answers.get(2)));
+        d.setText(champions.get(answers.get(3)));
+
     }
 
     public void chooseAnswer(View view) {
@@ -128,6 +159,8 @@ public class MainActivity extends AppCompatActivity {
         c = (Button) findViewById(R.id.button2);
         d = (Button) findViewById(R.id.button3);
         playAgainButton = (Button) findViewById(R.id.playAgainButton);
+
+        fillChampions();
 
         generateQuestion();
 
