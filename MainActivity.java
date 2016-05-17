@@ -1,5 +1,6 @@
 package com.benlewis.mmtrainerapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
@@ -65,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
 
         generateQuestion();
 
-        new CountDownTimer(3050, 1000) {
+        new CountDownTimer(5050, 1000) {
 
             @Override
             public void onTick(long millisUntilFinished) {
@@ -123,9 +124,9 @@ public class MainActivity extends AppCompatActivity {
         champTextView.setText(champions.get(correctAnswer));
         //a.setText(champions.get(answers.get(0)));
         a.setBackgroundResource(getChamp(champions.get(answers.get(0)).toLowerCase()));
-        b.setText(champions.get(answers.get(1)));
-        c.setText(champions.get(answers.get(2)));
-        d.setText(champions.get(answers.get(3)));
+        b.setBackgroundResource(getChamp(champions.get(answers.get(1)).toLowerCase()));
+        c.setBackgroundResource(getChamp(champions.get(answers.get(2)).toLowerCase()));
+        d.setBackgroundResource(getChamp(champions.get(answers.get(3)).toLowerCase()));
 
     }
 
@@ -182,7 +183,19 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.settings) {
+
+            Intent i = new Intent(getApplicationContext(), Settings.class);
+            startActivity(i);
+
+            return true;
+        }
+
+        if (id == R.id.stats) {
+
+            Intent i = new Intent(getApplicationContext(), Stats.class);
+            startActivity(i);
+
             return true;
         }
 
