@@ -32,9 +32,10 @@ public class Stats extends AppCompatActivity {
         setSupportActionBar(toolbar);
         overallText = (TextView) findViewById(R.id.statsOverallResults);
 
-        int overallScore = 0;
-        int overallPoints = 0;
-        int overallQuestions = 0;
+        double overallScore = 0;
+        double overallPoints = 0;
+        double overallQuestions = 0;
+        double count = 0;
 
         last7Score = 0;
         bestScore = 0;
@@ -52,34 +53,39 @@ public class Stats extends AppCompatActivity {
 
               do {
                   //Log.i("id", String.valueOf(c.getInt(idIndex)));
-                  Log.i("total", c.getString(totalIndex));
-                  overallScore += c.getInt(totalIndex);
 
-                  Log.i("points", String.valueOf(c.getInt(pointsIndex)));
-                  overallPoints += c.getInt(pointsIndex);
-
-                  Log.i("questions", String.valueOf(c.getInt(questionsIndex)));
-                  overallQuestions += c.getInt(questionsIndex);
+                  overallScore += c.getDouble(totalIndex);
+                  overallPoints += c.getDouble(pointsIndex);
+                  overallQuestions += c.getDouble(questionsIndex);
+                  count += c.getCount();
 
                   c.moveToNext();
 
                 } while(c.moveToNext());
             }
+            Log.i("score", String.valueOf(overallScore));
+            Log.i("points", String.valueOf((overallPoints)));
+            Log.i("questions", String.valueOf((overallQuestions)));
+            Log.i("count", String.valueOf(count));
 
-            updateScores(overallText, overallScore, overallPoints, overallQuestions);
+            double averageScore = (overallScore / count) * 10;
+            double averagePoints = (overallPoints / count) * 10;
+            double averageQuestions = (overallQuestions / count) * 10;
+
+            updateScores(overallText, Math.round(averageScore), averagePoints, averageQuestions);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-    public void updateScores (TextView view, int score, int points, int questions) {
+    public void updateScores (TextView view, double score, double points, double questions) {
         view.setText(String.valueOf(score) + "%" + " Totals: " +
-            points + "/" + questions);
+                Integer.valueOf((int) points).toString()
+                + "/" +
+                Integer.valueOf((int) questions).toString());
     }
 
 }

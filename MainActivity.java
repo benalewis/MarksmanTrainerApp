@@ -26,9 +26,9 @@ public class MainActivity extends AppCompatActivity {
     TextView scoreTextView;
     TextView timerTextView;
 
-    int score;
-    int noQuestions;
-    int total;
+    double score;
+    double noQuestions;
+    double total;
 
     Button a;
     Button b;
@@ -42,12 +42,12 @@ public class MainActivity extends AppCompatActivity {
 
         try {
 
-            getApplicationContext().deleteDatabase("Scores");
+            //getApplicationContext().deleteDatabase("Scores");
 
             myDatabase = this.openOrCreateDatabase("Scores", MODE_PRIVATE, null);
 
-            myDatabase.execSQL("CREATE TABLE IF NOT EXISTS scores (total INT(3), points INT(3)," +
-                    "id INTEGER PRIMARY KEY, questions INT(3))");
+            myDatabase.execSQL("CREATE TABLE IF NOT EXISTS scores (total DOUBLE(3), points DOUBLE(3)," +
+                    "id INTEGER PRIMARY KEY, questions DOUBLE(3))");
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -105,7 +105,8 @@ public class MainActivity extends AppCompatActivity {
                 playAgainButton.setVisibility(View.VISIBLE);
                 timerTextView.setText("0s");
                 resultTextView.setText("Your score: " +
-                        Integer.toString(score) + "/" + Integer.toString(noQuestions));
+                        Integer.valueOf((int) score).toString() + "/" +
+                        Integer.valueOf((int) noQuestions).toString());
 
                 a.setVisibility(View.INVISIBLE);
                 b.setVisibility(View.INVISIBLE);
@@ -169,7 +170,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
         noQuestions++;
-        scoreTextView.setText(Integer.toString(score)+ "/" + Integer.toString(noQuestions));
+
+        scoreTextView.setText(
+                Integer.valueOf((int) score).toString() + "/" +
+                        Integer.valueOf((int) noQuestions).toString());
+
         generateQuestion();
     }
 
