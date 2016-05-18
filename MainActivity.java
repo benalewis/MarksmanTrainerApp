@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<String> champions = new ArrayList<String>();
 
     int locationOfCorrect;
-    int timer = 30;
+    int timer;
 
     TextView champTextView;
     TextView resultTextView;
@@ -43,15 +43,16 @@ public class MainActivity extends AppCompatActivity {
     static SharedPreferences sharedPreferences;
 
     public void updateTimer() {
-        timer = sharedPreferences.getInt("timer", 0);
+        if (sharedPreferences.getInt("timer", 0) == 0) {
+            timer = 30;
+        } else {
+            timer = sharedPreferences.getInt("timer", 0);
+        }
     }
 
     public void initDatabase() {
 
         try {
-
-            //getApplicationContext().deleteDatabase("Scores");
-
             myDatabase = this.openOrCreateDatabase("Scores", MODE_PRIVATE, null);
 
             myDatabase.execSQL("CREATE TABLE IF NOT EXISTS scores (total DOUBLE(3), points DOUBLE(3)," +
@@ -210,7 +211,7 @@ public class MainActivity extends AppCompatActivity {
         generateQuestion();
         updateTimer();
 
-        playAgain(findViewById(R.id.playAgainButton));
+        //playAgain(findViewById(R.id.playAgainButton));
     }
 
     @Override
