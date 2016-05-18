@@ -31,8 +31,9 @@ public class Settings extends AppCompatActivity {
         exportButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Snackbar snackbar;
-                
+                Snackbar snackbar = Snackbar.make(findViewById(R.id.setExportButton),
+                        "Coming Soon!", Snackbar.LENGTH_SHORT);
+                snackbar.show();
             }
         });
 

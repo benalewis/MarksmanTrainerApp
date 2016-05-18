@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     Button c;
     Button d;
     Button playAgainButton;
+    Button stopButton;
 
     static SQLiteDatabase myDatabase;
     static SharedPreferences sharedPreferences;
@@ -88,14 +89,15 @@ public class MainActivity extends AppCompatActivity {
         d.setVisibility(View.VISIBLE);
         champTextView.setVisibility(View.VISIBLE);
 
-        timerTextView.setText("30s");
+        timerTextView.setText(timer + "s");
         scoreTextView.setText("0/0");
-        resultTextView.setText("");
+        resultTextView.setText("Good Luck!");
         playAgainButton.setVisibility(View.INVISIBLE);
+        stopButton.setVisibility(View.VISIBLE);
 
         generateQuestion();
 
-        new CountDownTimer((timer*1000)+50, 1000) {
+        final CountDownTimer countDownTimer = new CountDownTimer((timer*1000)+50, 995) {
 
             @Override
             public void onTick(long millisUntilFinished) {
@@ -125,9 +127,18 @@ public class MainActivity extends AppCompatActivity {
 
                 myDatabase.execSQL("INSERT INTO scores (total, points, questions) VALUES (" +
                         total + ", " + score + ", " + noQuestions + ")");
+                stopButton.setVisibility(View.INVISIBLE);
             }
         }.start();
 
+        stopButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                countDownTimer.cancel();
+                playAgainButton.setVisibility(View.VISIBLE);
+                stopButton.setVisibility(View.INVISIBLE);
+            }
+        });
     }
 
     public void generateQuestion() {
@@ -205,6 +216,7 @@ public class MainActivity extends AppCompatActivity {
         c = (Button) findViewById(R.id.button2);
         d = (Button) findViewById(R.id.button3);
         playAgainButton = (Button) findViewById(R.id.playAgainButton);
+        stopButton = (Button) findViewById(R.id.mainStopButton);
 
         initDatabase();
         fillChampions();

@@ -102,6 +102,7 @@ public class Stats extends AppCompatActivity {
         double score = 0;
         double points = 0;
         double questions = 0;
+        double count = 0;
 
         try {
             c = MainActivity.myDatabase.rawQuery("SELECT * FROM scores ORDER BY id DESC LIMIT 7", null);
@@ -117,14 +118,20 @@ public class Stats extends AppCompatActivity {
                     score += c.getDouble(totalIndex);
                     points += c.getDouble(pointsIndex);
                     questions += c.getDouble(questionsIndex);
+                    count += c.getCount();
 
                     c.moveToNext();
 
                 } while (c.moveToNext());
 
+                if (count >= 7) {
+
                 updateScores(last7Text, Math.round(score/7),
                         Math.round(points/7),
-                        Math.round(questions/7));
+                        Math.round(questions/7)); }
+                else {
+                    last7Text.setText("Need more data");
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
