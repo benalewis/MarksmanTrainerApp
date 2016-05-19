@@ -53,9 +53,14 @@ public class Stats extends AppCompatActivity {
     }
 
     public void updateScores (TextView view, double score, double points, double questions) {
+
+        int s = Integer.valueOf((int) score);
+        int p = Integer.valueOf((int) points);
+        int q = Integer.valueOf((int) questions);
+
         view.setText(
-                String.valueOf(score) + "%" + " Totals: " + String.valueOf(points)
-                        + "/" + String.valueOf(questions));
+                String.valueOf(s) + "%" + " Totals: " + String.valueOf(p)
+                        + "/" + String.valueOf(q));
     }
 
     public void calcBest() {

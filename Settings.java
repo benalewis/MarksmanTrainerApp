@@ -32,7 +32,7 @@ public class Settings extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Snackbar snackbar = Snackbar.make(findViewById(R.id.setExportButton),
-                        "Coming Soon!", Snackbar.LENGTH_SHORT);
+                        "Feature to export to Dropbox coming soon!", Snackbar.LENGTH_SHORT);
                 snackbar.show();
             }
         });
@@ -65,6 +65,9 @@ public class Settings extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             getApplicationContext().deleteDatabase("Scores");
+                            Snackbar snackbar = Snackbar.make(resetDataButton, "Data reset.", Snackbar.LENGTH_SHORT
+                            );
+                            snackbar.show();
                         }
                     })
                     .setNegativeButton("Cancel", null)
@@ -78,6 +81,10 @@ public class Settings extends AppCompatActivity {
 
         try {
             MainActivity.sharedPreferences.edit().putInt("timer", Integer.parseInt(timerText.getText().toString())).apply();
+
+            Snackbar snackbar = Snackbar.make(updateTimerButton, "Timer updated.", Snackbar.LENGTH_SHORT);
+            snackbar.show();
+
         } catch (Exception e) {
             e.printStackTrace();
         }

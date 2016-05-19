@@ -3,6 +3,7 @@ package com.benlewis.mmtrainerapp;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
@@ -50,9 +51,11 @@ public class MainActivity extends AppCompatActivity {
     GridLayout gridLayout;
     RelativeLayout infoLayout;
 
+    MediaPlayer mediaPlayer;
+
     public void updateTimer() {
         if (sharedPreferences.getInt("timer", 0) == 0) {
-            timer = 30;
+            timer = 3;
         } else {
             timer = sharedPreferences.getInt("timer", 0);
         }
@@ -90,11 +93,13 @@ public class MainActivity extends AppCompatActivity {
         score = 0;
         noQuestions = 0;
 
+        gridLayout.setVisibility(View.VISIBLE);
         a.setVisibility(View.VISIBLE);
         b.setVisibility(View.VISIBLE);
         c.setVisibility(View.VISIBLE);
         d.setVisibility(View.VISIBLE);
         champTextView.setVisibility(View.VISIBLE);
+        resultTextView.setVisibility(View.VISIBLE);
 
         timerTextView.setText(timer + "s");
         scoreTextView.setText("0/0");
@@ -114,6 +119,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFinish() {
 
+                playFinish();
+
                 if ( score <= 0 || noQuestions <= 0) {
                     total = 0;
                 } else {
@@ -126,11 +133,13 @@ public class MainActivity extends AppCompatActivity {
                         Integer.valueOf((int) score).toString() + "/" +
                         Integer.valueOf((int) noQuestions).toString());
 
-                a.setVisibility(View.INVISIBLE);
+               /* a.setVisibility(View.INVISIBLE);
                 b.setVisibility(View.INVISIBLE);
                 c.setVisibility(View.INVISIBLE);
                 d.setVisibility(View.INVISIBLE);
-                champTextView.setVisibility(View.INVISIBLE);
+                champTextView.setVisibility(View.INVISIBLE);*/
+
+                gridLayout.setVisibility(View.INVISIBLE);
 
                 myDatabase.execSQL("INSERT INTO scores (total, points, questions) VALUES (" +
                         total + ", " + score + ", " + noQuestions + ")");
@@ -144,6 +153,8 @@ public class MainActivity extends AppCompatActivity {
                 countDownTimer.cancel();
                 playAgainButton.setVisibility(View.VISIBLE);
                 stopButton.setVisibility(View.INVISIBLE);
+                gridLayout.setVisibility(View.INVISIBLE);
+                resultTextView.setVisibility(View.INVISIBLE);
             }
         });
     }
@@ -192,8 +203,10 @@ public class MainActivity extends AppCompatActivity {
         if (view.getTag().toString().equals(Integer.toString(locationOfCorrect))) {
             score++;
             resultTextView.setText("Correct!");
+            playCorrect();
         } else {
             resultTextView.setText("Wrong!");
+            playIncorrect();
         }
 
         noQuestions++;
@@ -286,5 +299,24 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void playCorrect() {
+
+        mediaPlayer = MediaPlayer.create(this, R.raw.ting);
+
+        mediaPlayer.start();
+    }
+
+    public void playIncorrect() {
+        mediaPlayer = MediaPlayer.create(this, R.raw.wrong);
+
+        mediaPlayer.start();
+    }
+
+    public void playFinish() {
+        mediaPlayer = MediaPlayer.create(this, R.raw.end);
+
+        mediaPlayer.start();
     }
 }
