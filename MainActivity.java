@@ -11,6 +11,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.GridLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -39,9 +41,14 @@ public class MainActivity extends AppCompatActivity {
     Button d;
     Button playAgainButton;
     Button stopButton;
+    Button startButton;
 
     static SQLiteDatabase myDatabase;
     static SharedPreferences sharedPreferences;
+
+    RelativeLayout extraLayout;
+    GridLayout gridLayout;
+    RelativeLayout infoLayout;
 
     public void updateTimer() {
         if (sharedPreferences.getInt("timer", 0) == 0) {
@@ -204,10 +211,19 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         champTextView = (TextView) findViewById(R.id.champTextView);
         resultTextView = (TextView) findViewById(R.id.resultTextView);
         scoreTextView = (TextView) findViewById(R.id.scoreTextView);
         timerTextView = (TextView) findViewById(R.id.timerTextView);
+
+        gridLayout = (GridLayout) findViewById(R.id.gridLayout);
+        infoLayout = (RelativeLayout) findViewById(R.id.infoLayout);
+        extraLayout = (RelativeLayout) findViewById(R.id.extraLayout);
+
+        gridLayout.setVisibility(View.INVISIBLE);
+        infoLayout.setVisibility(View.INVISIBLE);
+        extraLayout.setVisibility(View.INVISIBLE);
 
         sharedPreferences = this.getSharedPreferences("com.benlewis.mmtrainerapp", MODE_PRIVATE);
 
@@ -217,13 +233,25 @@ public class MainActivity extends AppCompatActivity {
         d = (Button) findViewById(R.id.button3);
         playAgainButton = (Button) findViewById(R.id.playAgainButton);
         stopButton = (Button) findViewById(R.id.mainStopButton);
+        startButton = (Button) findViewById(R.id.startButton);
 
-        initDatabase();
-        fillChampions();
-        generateQuestion();
-        updateTimer();
+        startButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-        //playAgain(findViewById(R.id.playAgainButton));
+                gridLayout.setVisibility(View.VISIBLE);
+                infoLayout.setVisibility(View.VISIBLE);
+                extraLayout.setVisibility(View.VISIBLE);
+
+                initDatabase();
+                fillChampions();
+                generateQuestion();
+                updateTimer();
+                playAgain(findViewById(R.id.playAgainButton));
+
+                startButton.setVisibility(View.INVISIBLE);
+            }
+        });
     }
 
     @Override
