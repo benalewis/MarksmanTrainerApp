@@ -53,6 +53,55 @@ public class MainActivity extends AppCompatActivity {
 
     MediaPlayer mediaPlayer;
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        champTextView = (TextView) findViewById(R.id.champTextView);
+        resultTextView = (TextView) findViewById(R.id.resultTextView);
+        scoreTextView = (TextView) findViewById(R.id.scoreTextView);
+        timerTextView = (TextView) findViewById(R.id.timerTextView);
+
+        gridLayout = (GridLayout) findViewById(R.id.gridLayout);
+        infoLayout = (RelativeLayout) findViewById(R.id.infoLayout);
+        extraLayout = (RelativeLayout) findViewById(R.id.extraLayout);
+
+        gridLayout.setVisibility(View.INVISIBLE);
+        infoLayout.setVisibility(View.INVISIBLE);
+        extraLayout.setVisibility(View.INVISIBLE);
+
+        sharedPreferences = this.getSharedPreferences("com.benlewis.mmtrainerapp", MODE_PRIVATE);
+
+        a = (Button) findViewById(R.id.button);
+        b = (Button) findViewById(R.id.button1);
+        c = (Button) findViewById(R.id.button2);
+        d = (Button) findViewById(R.id.button3);
+        playAgainButton = (Button) findViewById(R.id.playAgainButton);
+        stopButton = (Button) findViewById(R.id.mainStopButton);
+        startButton = (Button) findViewById(R.id.startButton);
+
+        startButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                gridLayout.setVisibility(View.VISIBLE);
+                infoLayout.setVisibility(View.VISIBLE);
+                extraLayout.setVisibility(View.VISIBLE);
+
+                initDatabase();
+                fillChampions();
+                generateQuestion();
+                updateTimer();
+                playAgain(findViewById(R.id.playAgainButton));
+
+                startButton.setVisibility(View.INVISIBLE);
+            }
+        });
+    }
+
     public void updateTimer() {
         if (sharedPreferences.getInt("timer", 0) == 0) {
             timer = 30;
@@ -218,54 +267,6 @@ public class MainActivity extends AppCompatActivity {
         generateQuestion();
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        champTextView = (TextView) findViewById(R.id.champTextView);
-        resultTextView = (TextView) findViewById(R.id.resultTextView);
-        scoreTextView = (TextView) findViewById(R.id.scoreTextView);
-        timerTextView = (TextView) findViewById(R.id.timerTextView);
-
-        gridLayout = (GridLayout) findViewById(R.id.gridLayout);
-        infoLayout = (RelativeLayout) findViewById(R.id.infoLayout);
-        extraLayout = (RelativeLayout) findViewById(R.id.extraLayout);
-
-        gridLayout.setVisibility(View.INVISIBLE);
-        infoLayout.setVisibility(View.INVISIBLE);
-        extraLayout.setVisibility(View.INVISIBLE);
-
-        sharedPreferences = this.getSharedPreferences("com.benlewis.mmtrainerapp", MODE_PRIVATE);
-
-        a = (Button) findViewById(R.id.button);
-        b = (Button) findViewById(R.id.button1);
-        c = (Button) findViewById(R.id.button2);
-        d = (Button) findViewById(R.id.button3);
-        playAgainButton = (Button) findViewById(R.id.playAgainButton);
-        stopButton = (Button) findViewById(R.id.mainStopButton);
-        startButton = (Button) findViewById(R.id.startButton);
-
-        startButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                gridLayout.setVisibility(View.VISIBLE);
-                infoLayout.setVisibility(View.VISIBLE);
-                extraLayout.setVisibility(View.VISIBLE);
-
-                initDatabase();
-                fillChampions();
-                generateQuestion();
-                updateTimer();
-                playAgain(findViewById(R.id.playAgainButton));
-
-                startButton.setVisibility(View.INVISIBLE);
-            }
-        });
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
