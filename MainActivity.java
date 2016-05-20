@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void updateTimer() {
         if (sharedPreferences.getInt("timer", 0) == 0) {
-            timer = 3;
+            timer = 30;
         } else {
             timer = sharedPreferences.getInt("timer", 0);
         }
@@ -284,6 +284,15 @@ public class MainActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.settings) {
 
+            try {
+
+                mediaPlayer.stop();
+
+            } catch (Exception e) {
+
+                e.printStackTrace();
+            }
+
             Intent i = new Intent(getApplicationContext(), Settings.class);
             startActivity(i);
 
@@ -291,6 +300,15 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (id == R.id.stats) {
+
+            try {
+
+                mediaPlayer.stop();
+
+            } catch (Exception e) {
+
+                e.printStackTrace();
+            }
 
             Intent i = new Intent(getApplicationContext(), Stats.class);
             startActivity(i);
